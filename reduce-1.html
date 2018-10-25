@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./react.js"></script>
+	<script src="./react-dom.js"></script>
+	<script src="./babel.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="title"></div>
+        <div class="content"></div>
+    </div>
+    <script type="text/babel">
+        let appState = {
+            title: {
+                text: 'React.js 小书',
+                color: 'red',
+            },
+            content: {
+                text: 'React.js 小书内容',
+                color: 'blue'
+            }
+        }
+        let renderApp = (appState) => {
+            renderTitle(appState.title);
+            renderContent(appState.content); 
+        }
+        let renderTitle = (title) => {
+            const titleDom = document.querySelector('.title');
+            titleDom.innerHTML = title.text;
+            titleDom.style.color = title.color;
+        }
+        let renderContent = (content) => {
+            const contentDom = document.querySelector('.content');
+            contentDom.innerHTML = content.text;
+            contentDom.style.color = content.color;
+        }
+        let dispatch = (action) => {
+            switch(action.type){
+                case 'UPDATE_TEXT':
+                    appState.title.text = action.text;
+                    break;
+                case 'UPDATE_COLOR':
+                    appState.title.color = action.color;
+                    break;
+            }
+        }
+        renderApp(appState);
+        dispatch({type: 'UPDATE_TEXT',text: 'text被我改变啦~~~'});
+        dispatch({type: 'UPDATE_COLOR',color: 'pink'});
+        renderApp(appState);
+    </script>
+</body>
+</html>
