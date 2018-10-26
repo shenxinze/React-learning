@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>React 学习</title>
+	<link rel="stylesheet" href="./bootstrap.css">
+	<script src="./react.js"></script>
+	<script src="./react-dom.js"></script>
+	<script src="./babel.min.js"></script>
+	<script src="./pubsub.js"></script>
+</head>
+<body>
+	<div class="container"></div>
+	<script type="text/babel">
+	    var data =  [
+            {stName:"小明",gender:"女",age:18,height:165,weigth:45,_id:2},
+            {stName:"小红",gender:"男",age:35,height:180,weigth:80,_id:0},
+            {stName:"小童",gender:"女",age:22,height:171,weigth:60,_id:6},
+            {stName:"小莫",gender:"男",age:26,height:175,weigth:70,_id:1},
+            {stName:"小李",gender:"女",age:18,height:170,weigth:50,_id:3},
+            {stName:"小张",gender:"女",age:38,height:166,weigth:50,_id:4},
+            {stName:"小王",gender:"男",age:30,height:175,weigth:65,_id:5}
+         ]
+		class StudentHtml extends React.Component{
+			constructor(props){
+			    super(props);
+			    this.state = {
+					studentsData: data,
+					genderValue: 'all',
+					changeName: ''	
+				}
+			}
+			genderFilterHandle(e){
+				this.setState({genderValue: e.target.value})
+			}
+			nameFilterHandle(e){
+				this.setState({changeName: e.target.value})
+			}
+			componentDidMount(){
+				PubSub.subscribe('deleteItem',(evName,_id)=>{
+					var newArr = this.state.studentsData.filter((item,index)=>{
+						return _id != item._id;
+					})
+					this.setState({studentsData:newArr})
+				})
+			}
+			render(){
+				return (
+					<div>
+						<h1>学员信息表</h1>
+				        <div className="bs-example">
+				            <div className="form-group">
+				                <label>按性别筛选</label>
+				                <select className="form-control" onChange={(e)=>this.genderFilterHandle(e)}>
+				                    <option value="all">all</option>
+				                    <option value="1">男</option>
+				                    <option value="0">女</option>
+				                </select>
+				            </div>
+				            <div className="form-group">
+				                <label>按名字筛选</label>
+				                <input type="text" className="form-control" placeholder="请输入名字" onKeyUp={(e)=>this.nameFilterHandle(e)} />
+				            </div>
+				        </div>
+				        <StudentInfoHtml
+							studentsData = {this.state.studentsData}
+							genderValue = {this.state.genderValue}
+							changeName = {this.state.changeName}
+				         />
+					</div>
+				)
+			}
+		}
+		class StudentInfoHtml extends React.Component{
+			render(){
+				var list = [];
+				var genderValue = this.props.genderValue;
+				var changeName = this.props.changeName;
+				var genderArr = ["女","男",""];
+				this.props.studentsData.forEach((item,index)=>{
+					if(genderValue != 'all' && changeName == ''){
+						if(genderArr[genderValue] == item.gender){
+							list.push(<StudentItemHtml studentItem={item} key={index} />)
+						}
+						return; 
+					}
+					if(changeName != ''){
+						if(genderValue != 'all'){
+							if(changeName == item.stName && genderArr[genderValue] == item.gender){
+								list.push(<StudentItemHtml studentItem={item} key={index} />)
+							}
+						}else{
+							if(changeName == item.stName){
+								list.push(<StudentItemHtml studentItem={item} key={index} />)
+							}
+						}
+						return;
+					}
+					list.push(<StudentItemHtml studentItem={item} key={index} />)
+				})
+				return (
+					<div className="table-responsive">
+			            <table className="table table-bordered table-hover">
+			                <thead>
+			                    <tr>
+			                        <th>姓名</th>
+			                        <th>性别</th>
+			                        <th>年龄</th>
+			                        <th>身高（cm）</th>
+			                        <th>体重（kg）</th>
+			                        <th>操作</th>
+			                    </tr>
+			                </thead>
+			                <tbody id="tb">
+			                    {list}
+			                </tbody>
+			            </table>
+				    </div>
+				)
+			}
+		}
+		class StudentItemHtml extends React.Component{
+			deleteItem(){
+				PubSub.publish('deleteItem',this.props.studentItem._id);
+			}
+			render(){
+				var item = this.props.studentItem;
+				return (
+					<tr>
+                        <td>{item.stName}</td>
+                        <td>{item.gender}</td>
+                        <td>{item.age}</td>
+                        <td>{item.height}</td>
+                        <td>{item.weight}</td>
+                        <td><a href="javascript:;" onClick = {()=>this.deleteItem()}>删除</a></td>
+                    </tr>
+				)
+			}
+		}
+		ReactDOM.render(
+			<StudentHtml />,
+			document.querySelector('.container')
+		)
+	</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>todolist</title>
+	<style>
+		.btn{
+			background: red;
+			color: #fff;
+		}
+	</style>
+	<script src="./react.js"></script>
+	<script src="./react-dom.js"></script>
+	<script src="./babel.min.js"></script>
+</head>
+<body>
+	<div class="container"></div>
+	<script type="text/babel">
+		class Todolist extends React.Component {
+			constructor(props){
+			    super(props);
+			    this.state = {
+					list: [],
+					value: ''
+				}
+				this.inputChangeHandle = this.inputChangeHandle.bind(this);
+				this.btnHandle = this.btnHandle.bind(this);
+				this.deleteItem = this.deleteItem.bind(this);
+			}
+			btnHandle(){
+				this.setState({
+					list:[...this.state.list,this.state.value],
+					value:''
+				})
+			}
+			inputChangeHandle(e){
+				this.setState({value:e.target.value})
+			}
+			deleteItem(index){
+				let list = [...this.state.list];
+				list.splice(index,1);
+				this.setState({list});
+			}
+			getItems(){
+				return (
+					this.state.list.map((item,index)=>{
+						return <TodolistItem
+									deleteItem={this.deleteItem}
+									key={index}
+									value={item}
+									index={index}
+								/>
+					})
+				)
+			}
+			render(){
+				return (
+					<React.Fragment>
+						<React.Fragment>
+							<input type="text" value={this.state.value} onChange={this.inputChangeHandle} />
+							<button className="btn" onClick={this.btnHandle}>确定</button>
+						</React.Fragment>
+						<ul>{this.getItems()}</ul>
+					</React.Fragment>
+				)
+			}
+		}
+		class TodolistItem extends React.Component {
+			constructor(props){
+				super(props);
+				this.state = {};
+				this.deleteItemHandle = this.deleteItemHandle.bind(this);
+			}
+			deleteItemHandle(){
+				const {deleteItem,index} = this.props;
+				deleteItem(index)
+			}
+			render(){
+				const {value} = this.props;
+				return (
+					<li onClick={this.deleteItemHandle}>{value}</li>
+				)
+			}
+		}
+		ReactDOM.render(
+			<Todolist />,
+			document.querySelector('.container')
+		)
+	</script>
+</body>
+</html>
