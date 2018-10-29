@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./jquery-1.11.0.min.js"></script>
+</head>
+<body>
+    <div class="numBox">
+        <button class="toAdd">添加</button>
+        <div class="container">
+            <div class="box">
+                <!-- <p>
+                    <button class="reduce">-</button>
+                    <span class="num">0</span>
+                    <button class="add">+</button>
+                    <button class="oddAdd">oddAdd</button>
+                    <button class="waitAdd">waitAdd</button>
+                </p> -->
+            </div>
+        </div>
+    </div>
+    <script>
+        class count {
+            constructor(){
+                this.num = 0;
+                this.ele = $('<p></p>');
+                let reduce = $('<button class="reduce">-</button>');
+                let num = this.number = $('<span class="num">'+this.num+'</span>');
+                let add = $('<button class="add">+</button>');
+                let oddAdd = $('<button class="oddAdd">oddAdd</button>');
+                let waitAdd = $('<button class="waitAdd">waitAdd</button>');
+                this.ele.append(reduce,num,add,oddAdd,waitAdd);
+                this.add = this.add.bind(this);
+                this.reduce = this.reduce.bind(this);
+                add.click(this.add);
+                reduce.click(this.reduce);
+            }
+            add(){
+                this.number.html(++this.num);
+            }
+            reduce(){
+                if(this.num == 0) return;
+                this.number.html(--this.num);
+            }
+        }
+        $('.toAdd').click(function(){
+            let h = new count();
+            $('.box').append(h.ele)
+        })
+    </script>
+</body>
+</html>

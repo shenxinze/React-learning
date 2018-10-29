@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        li{
+            height: 350px;
+        }
+        .lazy-image { 
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: url('./loading.gif') no-repeat center; 
+        } 
+    </style>
+    <script>
+        window.onload = function(){
+            /* var lazyImgs = document.querySelectorAll('img')
+            var lazyLen = lazyImgs.length;
+            var lazyImgArray = [];
+            var windowBroswerHeight = document.documentElement.clientHeight;
+            window.onscroll = loadImg;
+            function loadImg(){
+                for(var i = 0;i < lazyLen;i++){
+                    var getTD = getTopHeight(lazyImgs[i]);
+                    var getST = getScrollTop();
+                    if(!lazyImgs[i].loaded && getST < getTD && getTD <(getST + windowBroswerHeight)){
+                        lazyImgs[i].src = lazyImgs[i].getAttribute('_src');
+                        lazyImgs[i].loaded = true;
+                    }
+                }
+            }
+            function getTopHeight(obj){
+                var topHeight = 0;
+                while(obj){
+                    topHeight += obj.offsetTop;
+                    obj = obj.offsetParent;
+                }
+                return topHeight;
+            }
+            function getScrollTop() {
+                return document.documentElement.scrollTop || document.body.scrollTop;
+            } */
+            class LazyImage {    
+                constructor(selector){
+                    this.imgsArr = document.querySelectorAll(selector);
+                    this.clientHeight = document.documentElement.clientHeight;
+                    this.init();
+                }
+                getTopHeight(obj){
+                    var topHeight = 0;
+                    while(obj){
+                        topHeight += obj.offsetTop;
+                        obj = obj.offsetParent;
+                    }
+                    return topHeight
+                }
+                getScrollTop() {
+                    return document.documentElement.scrollTop || document.body.scrollTop;
+                }
+                init(){
+                    for(var i = 0; i < this.imgsArr.length; i++){
+                        var getTD = this.getTopHeight(this.imgsArr[i]);
+                        var getST = this.getScrollTop();
+                        if(!this.imgsArr[i].loaded && getST < getTD && getTD < (getST + this.clientHeight) ){
+                            this.imgsArr[i].src = this.imgsArr[i].getAttribute('_src');
+                            this.imgsArr[i].loaded = true;
+                        }
+                    }
+               }
+            }
+            // 调用例子
+            new LazyImage('.lazy-image');
+            window.onscroll = function(){
+                new LazyImage('.lazy-image');
+            }
+        }
+        
+    </script>
+</head>
+<body>
+<ul>
+    <li><img class="lazy-image" _src="./1.jpg" alt=""></li>
+    <li><img class="lazy-image" _src="./1.jpg" alt=""></li>
+    <li><img class="lazy-image" _src="./1.jpg" alt=""></li>
+    <li><img class="lazy-image" _src="./1.jpg" alt=""></li>
+    <li><img class="lazy-image" _src="./1.jpg" alt=""></li>
+    <li><img class="lazy-image" _src="./1.jpg" alt=""></li>
+    <li><img class="lazy-image" _src="./1.jpg" alt=""></li>
+    <li><img class="lazy-image" _src="./1.jpg" alt=""></li>
+    <li><img class="lazy-image" _src="./1.jpg" alt=""></li>
+</ul>   
+</body>
+</html>

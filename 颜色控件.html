@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .boxShow{
+            width: 180px;
+            height: 180px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px #000;
+        }
+        .input{
+            width: 180px;
+            height: 24px;
+            text-indent: 10px;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid skyblue;
+            margin-top: 12px;
+        }
+    </style>
+    <script src="./react.js"></script>
+	<script src="./react-dom.js"></script>
+	<script src="./babel.min.js"></script>
+</head>
+<body>
+    <div class="container"></div>
+    <script type="text/babel">
+       class ColorControl extends React.Component {
+           constructor(props){
+               super(props);
+               this.state = {
+                   color: 'skyblue'
+               }
+           }
+           setColor(val){
+                this.setState({color: val})
+           }
+           render(){
+               return (
+                    <div>
+                        <BoxShow bg={this.state.color} />
+                        <InputColor color={this.state.color} onSetColor={this.setColor.bind(this)} />
+                    </div>
+               )
+           }
+       }
+       class BoxShow extends React.Component {
+           render(){
+               return (
+                   <div className="boxShow" style={{backgroundColor: this.props.bg}}></div>
+               )
+           }
+       }
+       class InputColor extends React.Component {
+           constructor(props){
+               super(props);
+               this.state = {
+                   color: this.props.color
+               }
+           }
+           onSetColor(e){
+               this.setState({color: e.target.value});
+               this.props.onSetColor(e.target.value);
+           }
+           blur(){
+               this.setState({color: ''})
+           }
+           render(){
+               return (
+                   <input className="input" type="text" placeholder="请输入颜色" value={this.state.color} onChange={this.onSetColor.bind(this)} onBlur={this.blur.bind(this)} />
+               )
+           }
+       }
+       ReactDOM.render(
+           <ColorControl />,
+           document.querySelector('.container')
+       )
+    </script>
+</body>
+</html>

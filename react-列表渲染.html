@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./react.js"></script>
+	<script src="./react-dom.js"></script>
+	<script src="./babel.min.js"></script>
+</head>
+<body>
+    <div class="container"></div>
+    <script type="text/babel">
+       class List extends React.Component {
+           constructor(props){
+               super(props);
+               this.state = {
+                    listArr: [1,2,3,4,5]
+               }
+           }
+           render(){
+                let Lis = this.state.listArr.map(item=><li key={item}>{item}</li>);
+                return (
+                    <div>
+                        <ul>{Lis}</ul>
+                        <Shen />
+                    </div>
+                    
+                )
+           }
+       }
+       function Shen(){
+           return <div>123</div>
+       }
+       ReactDOM.render(
+           <List />,
+           document.querySelector('.container')
+       )
+    </script>
+</body>
+</html>
