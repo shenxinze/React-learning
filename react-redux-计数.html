@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./react.js"></script>
+  <script src="./react-dom.js"></script>
+  <script src="./babel.min.js"></script>
+  <script src="./react-redux.js"></script>
+</head>
+<body>
+  <div class="container"></div>
+  <script type="text/babel">
+    class Count extends React.Component {
+      constructor(props){
+        super(props);
+        this.state = {
+          num: 0
+        }
+      }
+      add(){
+        store.dispatch({type: 'ADD'})
+      }
+      render(){
+        return (
+          <div>
+            <span>0</span><br/>
+            <button onClick={this.add}>增加</button>
+          </div>
+        )
+      }
+    }
+    let store = createStore(counter);
+    store.subscribe(()=>{
+      console.log(store.getState())
+    })
+    function counter(state,action){
+      switch(action.type){
+        case 'ADD':
+          return state + 1;
+        default:
+          return state;
+      }
+    }
+    ReactDOM.render(
+      <Count />,
+      document.querySelector('.container')
+    )
+  </script>
+</body>
+</html>
